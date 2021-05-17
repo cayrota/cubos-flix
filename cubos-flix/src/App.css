@@ -174,7 +174,7 @@ h2 {
   all: unset;
 }
 
-.cartaz-filme button {
+button.add-sacola {
   box-sizing: border-box;
   background-color: #A785ED;
   color: #FDFDFD;
@@ -186,6 +186,16 @@ h2 {
   padding: 0.25rem 0.5rem;
   display: flex;
   justify-content: space-between;
+}
+
+button.add-sacola:hover {
+  background: linear-gradient(0deg, rgba(46, 46, 46, 0.45), rgba(46, 46, 46, 0.45)), linear-gradient(0deg, #A785ED, #A785ED);
+
+}
+
+button.add-sacola:active {
+  background: linear-gradient(0deg, rgba(123, 123, 123, 0.45), rgba(123, 123, 123, 0.45)), linear-gradient(0deg, #A785ED, #A785ED);
+
 }
 
 .titulo {
@@ -337,7 +347,7 @@ div.inserir-cupom {
   all: unset;
 }
 
-.sacola-cheia button {
+button.finalizar-compra {
   background-color: #E25EBF;
   box-sizing: border-box;
   color: #FDFDFD;
@@ -351,8 +361,38 @@ div.inserir-cupom {
   justify-content: space-between;
 }
 
+button.finalizar-compra:hover {
+  background: linear-gradient(0deg, rgba(225, 123, 123, 0.45), rgba(225, 123, 123, 0.45)), linear-gradient(0deg, #FFB6EB, #FFB6EB);
+}
+
+button.finalizar-compra:active {
+  background: linear-gradient(0deg, rgba(225, 123, 123, 0.6), rgba(225, 123, 123, 0.6)), linear-gradient(0deg, #FFB6EB, #FFB6EB);
+
+}
+
 .carrinho {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.search-icon:hover, .fav-icon:hover, .trash:hover, .plus:hover, .minus:hover, button:hover {
+  cursor: pointer;
+}
+
+.trash:hover, .plus:hover, .minus:hover {
+  background-color: #6B6B6B5E;
+}
+
+.trash:active, .plus:active, .minus:active {
+  background-color: #BFBFBF5E;
+}
+
+input:hover {
+  border: 1px solid #8C8C8C
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid #FDFDFD
 }

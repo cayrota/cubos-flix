@@ -12,11 +12,23 @@ function App() {
   const [carrinho, setCarrinho] = useState([]);
   const [valorTotal, setValorTotal] = useState(0);
   const [desconto, setDesconto] = useState(1);
+  const [pesquisar, setPesquisar] = useState("");
   const filmes = movies;
+  let stringPesqeuisar = "";
 
   function esconderBanner() {
     setBanner("banner banner-hide");
-    setDesconto(0.9)
+    setDesconto(0.9);
+  }
+
+  function aplicarCupom(e) {
+    if (e.key !== 'Enter' || e.target.value !== "htmlnaoelinguagem") {
+      return;
+    } else {
+      setDesconto(0.9);
+      setBanner("banner banner-hide");
+      e.target.value = "";
+    }
   }
 
   function favoritarFilme(i) {
@@ -86,11 +98,37 @@ function App() {
     if (filtro === 'horror' && filme.categories.includes('horror')) return filmes;
   }
 
+  function handlePesquisar(e) {
+    if (e.key !== "Enter") {
+      return;
+    } else {
+      setPesquisar(stringPesqeuisar);
+    }
+  }
+
+  function handleInput(e) {
+    stringPesqeuisar = e.target.value;
+  }
+
+  function handleSearch() {
+    setPesquisar(stringPesqeuisar);
+  }
+
+  function pesquisarFilme(filme) {
+    const nomeFilmeMin = filme.title.toLowerCase();
+    setPesquisar(pesquisar.toLowerCase())
+    if (!pesquisar) {
+      return filmes
+    } else {
+      if (nomeFilmeMin.includes(pesquisar)) return filmes;
+    }
+  }
+
   function cartazFilmes(array) {
     return array.map((filme, i) => {
       return (
         <div className="cartaz-filme" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.05),rgba(0, 0, 0, 0.5)), url(${filme.backgroundImg})` }}>
-          <svg className={filme.isStarred ? "favoritado" : ""} onClick={() => favoritarFilme(i)} width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className={filme.isStarred ? "fav-icon favoritado" : "fav-icon"} onClick={() => favoritarFilme(i)} width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2L11.7961 7.52786H17.6085L12.9062 10.9443L14.7023 16.4721L10 13.0557L5.29772 16.4721L7.09383 10.9443L2.39155 7.52786H8.20389L10 2Z" stroke="white" stroke-opacity="0.83" />
           </svg>
           <div className="titulo-botao">
@@ -103,7 +141,7 @@ function App() {
                 {filme.starsCount}
               </p>
             </div>
-            <button onClick={() => handleCarrinho(i)}>Sacola <span>R$ {parseInt(filme.price)},{`${(filme.price % 1) * 10}`.padEnd(2, "0")}</span></button>
+            <button className="add-sacola" onClick={() => handleCarrinho(i)}>Sacola <span>R$ {parseInt(filme.price)},{`${(filme.price % 1) * 10}`.padEnd(2, "0")}</span></button>
           </div>
         </div>
       )
@@ -116,7 +154,7 @@ function App() {
   }
 
   function Filmes() {
-    return cartazFilmes(filmes.filter(filtrarFilmes));
+    return cartazFilmes(filmes.filter(pesquisarFilme).filter(filtrarFilmes));
   }
 
   function Sacola() {
@@ -166,7 +204,7 @@ function App() {
             </svg>
             <div className="inserir-cupom">
               <label htmlFor="InserirCupom">Insira seu cupom</label>
-              <input type="text" name="InserirCupom" id="InserirCupom" placeholder="Cupom de desconto" />
+              <input onKeyPress={(e) => aplicarCupom(e)} type="text" name="InserirCupom" id="InserirCupom" placeholder="Cupom de desconto" />
               <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="cupom-icon">
                 <path opacity="0.4" d="M10.1203 3.54248V5.55915" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
                 <path opacity="0.4" d="M10.1203 14.8008V16.4875" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
@@ -188,7 +226,7 @@ function App() {
                         <p>R$ {parseInt(filme.price)},{`${(filme.price % 1) * 10}`.padEnd(2, "0")}</p>
                       </div>
                       <div className="quantidade">
-                        <svg onClick={() => handleAumentarQtd(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="plus"onClick={() => handleAumentarQtd(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <g filter="url(#filter0_b)">
                             <rect width="24" height="24" fill="black" fill-opacity="0.37" />
                           </g>
@@ -206,7 +244,7 @@ function App() {
                         <span>{filme.quantidade}</span>
                         {
                           filme.quantidade === 1 ?
-                            <svg onClick={() => handleExcluirFilme(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="trash" onClick={() => handleExcluirFilme(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <g filter="url(#filter0_c)">
                                 <rect width="24" height="24" fill="black" fill-opacity="0.37" />
                               </g>
@@ -223,7 +261,7 @@ function App() {
                               </defs>
                             </svg>
                             :
-                            <svg onClick={() => handleDiminuirQtd(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="minus"onClick={() => handleDiminuirQtd(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <g filter="url(#filter0_d)">
                                 <rect width="24" height="24" fill="black" fill-opacity="0.37" />
                               </g>
@@ -246,7 +284,7 @@ function App() {
             </div>
             <div className="inserir-cupom">
               <label htmlFor="InserirCupom">Insira seu cupom</label>
-              <input type="text" name="InserirCupom" id="InserirCupom" placeholder="Cupom de desconto" />
+              <input onKeyPress={(e) => aplicarCupom(e)} type="text" name="InserirCupom" id="InserirCupom" placeholder="Cupom de desconto" />
               <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="cupom-icon">
                 <path opacity="0.4" d="M10.1203 3.54248V5.55915" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
                 <path opacity="0.4" d="M10.1203 14.8008V16.4875" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
@@ -254,7 +292,7 @@ function App() {
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5726 16.6669C14.8688 16.6669 15.9186 15.4523 15.9186 13.9528V11.7924C15.0609 11.7924 14.3702 10.9933 14.3702 10.001C14.3702 9.0088 15.0609 8.20883 15.9186 8.20883L15.9179 6.04755C15.9179 4.54804 14.8673 3.3335 13.5718 3.3335H4.03772C2.74227 3.3335 1.69166 4.54804 1.69166 6.04755L1.69092 8.27922C2.54862 8.27922 3.23938 9.0088 3.23938 10.001C3.23938 10.9933 2.54862 11.7924 1.69092 11.7924V13.9528C1.69092 15.4523 2.74078 16.6669 4.03698 16.6669H13.5726Z" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </div>
-            <button>Confirme seus dados <span>R$ {valorTotal * desconto}</span></button>
+            <button className="finalizar-compra">Confirme seus dados <span>R$ {valorTotal * desconto}</span></button>
           </div>
 
         }
@@ -270,8 +308,8 @@ function App() {
           <path opacity="0.4" d="M2.29534 14.5806C1.33944 15.1416 0.136051 14.4246 0.182454 13.3475C0.296915 10.8214 0.494901 8.59529 0.736197 6.9392C0.773319 6.9032 1.26519 3.96605 1.83131 2.973C2.81815 1.12791 4.7547 -0.000145912 6.83665 -0.000145912H7.00989C8.35248 0.032855 11.2078 1.16091 11.2078 1.22991C12.6463 1.79694 14.5241 2.75699 16.5442 3.91205C17.4537 4.43408 17.4753 5.71514 16.5658 6.24617L2.29534 14.5806Z" fill="#F089D3" />
         </svg>
         <div className="search-container">
-          <input type="search" name="" id="" placeholder="Pesquise filmes..." />
-          <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="search-icon">
+          <input onKeyPress={(e) => handlePesquisar(e)} onInput={(e) => handleInput(e)} type="search" name="" id="" placeholder="Pesquise filmes..." />
+          <svg onClick={handleSearch} width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="search-icon">
             <circle cx="6.84448" cy="6.84448" r="5.99243" stroke="white" stroke-width="1.00001" stroke-linecap="round" stroke-linejoin="round" />
             <path opacity="0.4" d="M11.0122 11.3232L13.3616 13.6665" stroke="white" stroke-width="1.00001" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
