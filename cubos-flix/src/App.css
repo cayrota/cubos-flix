@@ -1,0 +1,345 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+}
+
+.App {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: grid;
+  grid-template-areas: "header header" "main aside";
+  grid-template-rows: min-content;
+  grid-template-columns: min-content;
+  row-gap: 1.5rem;
+  column-gap: 4.375rem;
+  background-color: #1D2226;
+  color: #FDFDFD;
+}
+
+a {
+  text-decoration: none;
+  color: #FDFDFD;
+}
+
+header {
+  grid-area: header;
+  background-color: #0F1C26;
+  height: 6.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5rem;
+  padding: 0 5.8125rem;
+}
+
+div.search-container {
+  display: flex;
+  position: relative;
+}
+
+.search-container input {
+  background-color: #171B1E;
+  border: 1px solid transparent;
+  height: 3.5rem;
+  width: 28.5rem;
+  color: #FDFDFD;
+  font-family: 'Manrope', sans-serif;
+  padding: 1rem 0.8125rem;
+}
+
+.search-container input::placeholder {
+  font-family: 'Manrope', sans-serif;
+}
+
+.search-icon {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 1;
+}
+
+.profile-img {
+  height: 3.5rem;
+  width: 3.5rem;
+}
+
+.profile, .promo, .fav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+main {
+  grid-area: main;
+  padding-left: 5.8125rem;
+}
+
+.banner {
+  width: 58.5rem;
+  background-image: url('./assets/images/bg-promotion.svg');
+  height: 7.4375rem;
+  margin-bottom: 2.5rem;
+  color: #0F0915;
+  display: grid;
+  grid-template-areas: "cupom cronometro money";
+  grid-template-columns: max-content;
+  grid-template-rows: 7.4375rem;
+  padding: 1rem 1.5rem;
+  column-gap: 3rem;
+}
+
+.banner-hide {
+  visibility: hidden;
+}
+
+.cupom {
+  grid-area: cupom;
+}
+
+.cupom > h1 {
+  font-size: 40px;
+  font-family: 'Quantico', sans-serif;
+}
+
+.container-cupom, .container-cronometro {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: 'Quantico', sans-serif;
+}
+
+.container-cupom p, .container-cronometro p {
+  font-family: 'Quantico', sans-serif;
+}
+
+.cronometro {
+  grid-area: cronometro;
+}
+
+.cronometro > h2 {
+  font-family: 'Quantico', sans-serif;
+}
+h2 {
+  font-size: 24px;
+}
+
+.banner img {
+  grid-area: money;
+  margin-top: -3.25rem;
+}
+
+.top-filmes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.filmes-topfilmes {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.cartaz-filme {
+  height: 15.75rem;
+  width: 10.5rem;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cartaz-filme h3 {
+  font-size: 16px;
+}
+
+.cartaz-filme p {
+  font-size: 12px;
+  color: #FBCD6E;
+  display: flex;
+  align-items: center;
+}
+
+.favoritado {
+  fill: white;
+}
+
+.cartaz-filme button {
+  all: unset;
+}
+
+.cartaz-filme button {
+  box-sizing: border-box;
+  background-color: #A785ED;
+  color: #FDFDFD;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.filmes {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(5, min-content);
+  gap: 1.5rem;
+}
+
+.Filtros {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.Filtros button {
+  all: unset;
+}
+
+.Filtros button {
+  box-sizing: border-box;
+  border: 2px solid #FFFFFF;
+  color: #FFFFFF;
+  font-weight: 600;
+  font-family: 'Manrope', sans-serif;
+  width: 10.5rem;
+  height: 2.375rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Filtros button:hover {
+  border: 2px solid hsla(316, 61%, 70%, 1);
+  color: hsla(316, 61%, 70%, 1);
+}
+
+button.filtro-ativo {
+  background-color: hsla(316, 61%, 70%, 0.2);
+  border: 2px solid hsla(316, 61%, 70%, 1);
+  color: hsla(316, 61%, 70%, 1);
+}
+
+.todos-filmes {
+  display: flex;
+  flex-direction: column;
+}
+
+aside {
+  grid-area: aside;
+}
+
+.sacola .label {
+  background: linear-gradient(0deg, #A785ED, #A785ED), linear-gradient(0deg, #C4C4C4, #C4C4C4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 0;
+  width: 19.5rem;
+}
+
+.sacola-vazia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #00000033;
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.sacola-vazia p {
+  margin: 0.5rem auto;
+}
+
+div.inserir-cupom {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  margin: 0.5rem auto;
+}
+
+.inserir-cupom input {
+  background-color: #0B1217;
+  border: 1px solid transparent;
+  height: 2.5rem;
+  width: 17.5rem;
+  color: #FDFDFD;
+  font-family: 'Manrope', sans-serif;
+  padding: 1rem 0.8125rem;
+}
+
+.inserir-cupom label{
+  color: #FDFDFD;
+  font-size: 12px;
+}
+
+.inserir-cupom input::placeholder {
+  font-family: 'Manrope', sans-serif;
+}
+
+.cupom-icon {
+  position: absolute;
+  bottom: 0.625rem;
+  right: 0.84375rem;
+  z-index: 1;
+}
+
+.sacola-cheia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #00000033;
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.sacola-cheia img {
+  height: 4.1875rem;
+  width: 2.6875rem;
+}
+
+.filme-carrinho {
+  display: flex;
+  width: 17.5rem;
+  gap: 1rem;
+}
+
+.quantidade {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.titulo-preco {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sacola-cheia button {
+  all: unset;
+}
+
+.sacola-cheia button {
+  background-color: #E25EBF;
+  box-sizing: border-box;
+  color: #FDFDFD;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  width: 17.5rem;
+}
