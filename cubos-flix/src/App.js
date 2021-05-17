@@ -1,7 +1,7 @@
 import './App.css';
 import profile from './assets/images/profile.jpg';
 import money from './assets/images/money.png';
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import movies from './data.js'
 
 function App() {
@@ -10,13 +10,13 @@ function App() {
   const [filtro, setFiltro] = useState('todos');
   const [filtroAtivo, setFiltroAtivo] = useState('todos');
   const [carrinho, setCarrinho] = useState([]);
-  const [qtd, setQtd] = useState(2);
+  const [valorTotal, setValorTotal] = useState(0);
+  const [desconto, setDesconto] = useState(1);
   const filmes = movies;
-  const BASE_PATH = 'https://image.tmdb.org/t/p/original/';
-
 
   function esconderBanner() {
-    setBanner("banner banner-hide")
+    setBanner("banner banner-hide");
+    setDesconto(0.9)
   }
 
   function favoritarFilme(i) {
@@ -32,8 +32,9 @@ function App() {
   function handleCarrinho(i) {
     if (carrinho.find(filme => filme.title === filmes[i].title)) {
       const i2 = carrinho.findIndex(filme => filme.title === filmes[i].title);
-      setQtd(qtd + 1)
-      carrinho[i2].quantidade = qtd;
+      carrinho[i2].quantidade += 1;
+      setCarrinho([...carrinho])
+      setValorTotal(valorTotal + carrinho[i2].price)
     } else {
       const filmeAdd = {
         title: filmes[i].title,
@@ -42,13 +43,28 @@ function App() {
         quantidade: 1,
       }
       setCarrinho([...carrinho, filmeAdd]);
+      setValorTotal(valorTotal + filmeAdd.price)
     }
+    
   }
-
-  function handleQtd() {
-      setQtd(qtd + 1)
+  
+  function handleAumentarQtd(i) {
+    carrinho[i].quantidade += 1;
+    setCarrinho([...carrinho]);
+    setValorTotal(valorTotal + carrinho[i].price)
   }
-
+  
+  function handleDiminuirQtd(i) {
+    carrinho[i].quantidade -= 1;
+    setCarrinho([...carrinho]);
+    setValorTotal(valorTotal - carrinho[i].price);
+  }
+  
+  function handleExcluirFilme(i) {
+    setValorTotal(valorTotal - carrinho[i].price);
+    carrinho.splice(i, 1);
+    setCarrinho([...carrinho])
+  }
 
   function Filtros() {
     return (
@@ -168,11 +184,11 @@ function App() {
                     <div className="filme-carrinho">
                       <img src={filme.backgroundImg} alt="" />
                       <div className="titulo-preco">
-                        <p style={{fontWeight: "700"}}>{filme.title}</p>
+                        <p style={{ fontWeight: "700" }}>{filme.title}</p>
                         <p>R$ {parseInt(filme.price)},{`${(filme.price % 1) * 10}`.padEnd(2, "0")}</p>
                       </div>
                       <div className="quantidade">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg onClick={() => handleAumentarQtd(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <g filter="url(#filter0_b)">
                             <rect width="24" height="24" fill="black" fill-opacity="0.37" />
                           </g>
@@ -188,22 +204,40 @@ function App() {
                           </defs>
                         </svg>
                         <span>{filme.quantidade}</span>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <g filter="url(#filter0_c)">
-                            <rect width="24" height="24" fill="black" fill-opacity="0.37" />
-                          </g>
-                          <path opacity="0.4" d="M19.325 9.46777C19.325 9.46777 18.782 16.2028 18.467 19.0398C18.317 20.3948 17.48 21.1888 16.109 21.2138C13.5 21.2608 10.888 21.2638 8.28003 21.2088C6.96103 21.1818 6.13803 20.3778 5.99103 19.0468C5.67403 16.1848 5.13403 9.46777 5.13403 9.46777" stroke="#FF7366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                          <path d="M20.7082 6.23926H3.75024" stroke="#FF7366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                          <path d="M17.4406 6.23949C16.6556 6.23949 15.9796 5.68449 15.8256 4.91549L15.5826 3.69949C15.4326 3.13849 14.9246 2.75049 14.3456 2.75049H10.1126C9.53358 2.75049 9.02558 3.13849 8.87558 3.69949L8.63258 4.91549C8.47858 5.68449 7.80258 6.23949 7.01758 6.23949" stroke="#FF7366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                          <defs>
-                            <filter id="filter0_c" x="-15" y="-15" width="54" height="54" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                              <feGaussianBlur in="BackgroundImage" stdDeviation="7.5" />
-                              <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
-                              <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
-                            </filter>
-                          </defs>
-                        </svg>
+                        {
+                          filme.quantidade === 1 ?
+                            <svg onClick={() => handleExcluirFilme(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <g filter="url(#filter0_c)">
+                                <rect width="24" height="24" fill="black" fill-opacity="0.37" />
+                              </g>
+                              <path opacity="0.4" d="M19.325 9.46777C19.325 9.46777 18.782 16.2028 18.467 19.0398C18.317 20.3948 17.48 21.1888 16.109 21.2138C13.5 21.2608 10.888 21.2638 8.28003 21.2088C6.96103 21.1818 6.13803 20.3778 5.99103 19.0468C5.67403 16.1848 5.13403 9.46777 5.13403 9.46777" stroke="#FF7366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M20.7082 6.23926H3.75024" stroke="#FF7366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M17.4406 6.23949C16.6556 6.23949 15.9796 5.68449 15.8256 4.91549L15.5826 3.69949C15.4326 3.13849 14.9246 2.75049 14.3456 2.75049H10.1126C9.53358 2.75049 9.02558 3.13849 8.87558 3.69949L8.63258 4.91549C8.47858 5.68449 7.80258 6.23949 7.01758 6.23949" stroke="#FF7366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <defs>
+                                <filter id="filter0_c" x="-15" y="-15" width="54" height="54" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                  <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                  <feGaussianBlur in="BackgroundImage" stdDeviation="7.5" />
+                                  <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
+                                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
+                                </filter>
+                              </defs>
+                            </svg>
+                            :
+                            <svg onClick={() => handleDiminuirQtd(i)} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <g filter="url(#filter0_d)">
+                                <rect width="24" height="24" fill="black" fill-opacity="0.37" />
+                              </g>
+                              <path d="M20.7082 11.5H3.75024" stroke="#FF7366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <defs>
+                                <filter id="filter0_d" x="-15" y="-15" width="54" height="54" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                  <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                  <feGaussianBlur in="BackgroundImage" stdDeviation="7.5" />
+                                  <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
+                                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
+                                </filter>
+                              </defs>
+                            </svg>
+                        }
                       </div>
                     </div>
                   )
@@ -220,7 +254,7 @@ function App() {
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5726 16.6669C14.8688 16.6669 15.9186 15.4523 15.9186 13.9528V11.7924C15.0609 11.7924 14.3702 10.9933 14.3702 10.001C14.3702 9.0088 15.0609 8.20883 15.9186 8.20883L15.9179 6.04755C15.9179 4.54804 14.8673 3.3335 13.5718 3.3335H4.03772C2.74227 3.3335 1.69166 4.54804 1.69166 6.04755L1.69092 8.27922C2.54862 8.27922 3.23938 9.0088 3.23938 10.001C3.23938 10.9933 2.54862 11.7924 1.69092 11.7924V13.9528C1.69092 15.4523 2.74078 16.6669 4.03698 16.6669H13.5726Z" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </div>
-            <button>Confirme seus dados <span></span></button>
+            <button>Confirme seus dados <span>R$ {valorTotal * desconto}</span></button>
           </div>
 
         }

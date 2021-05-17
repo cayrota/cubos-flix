@@ -91,6 +91,8 @@ main {
 
 .banner-hide {
   visibility: hidden;
+  height: 0;
+  margin-bottom: 0;
 }
 
 .cupom {
@@ -120,6 +122,7 @@ main {
 .cronometro > h2 {
   font-family: 'Quantico', sans-serif;
 }
+
 h2 {
   font-size: 24px;
 }
@@ -321,12 +324,13 @@ div.inserir-cupom {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  margin-left: auto;
 }
 
 .titulo-preco {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .sacola-cheia button {
@@ -337,9 +341,18 @@ div.inserir-cupom {
   background-color: #E25EBF;
   box-sizing: border-box;
   color: #FDFDFD;
+  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
   width: 17.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.carrinho {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
